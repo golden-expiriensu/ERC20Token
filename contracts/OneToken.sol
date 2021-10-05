@@ -17,9 +17,10 @@ contract OneToken {
         if (numberTokens < allowance(owner, spender)) _;
     }
 
-    constructor(uint256 total) {
+    constructor(uint256 total, address bank) {
         totalSupply_ = total;
-        balances[msg.sender] = total;
+        if (bank == address(0)) balances[msg.sender] = total;
+        else balances[bank] = total;
     }
 
     function totalSupply() public view returns (uint256) {
