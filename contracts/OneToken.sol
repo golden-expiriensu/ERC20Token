@@ -4,6 +4,8 @@ contract OneToken {
     mapping(address => uint256) balances;
     mapping(address => mapping(address => uint256)) allowed;
     uint256 totalSupply_;
+    string public name = "One";
+    string public symbol = "ntn"; 
 
     modifier enoughTokensOnBalance(uint256 numberTokens, address owner) {
         if (balances[owner] >= numberTokens) _;
@@ -27,7 +29,7 @@ contract OneToken {
         return totalSupply_;
     }
 
-    function getBalance(address owner) public view returns (uint256) {
+    function balanceOf(address owner) public view returns (uint256) {
         return balances[owner];
     }
 

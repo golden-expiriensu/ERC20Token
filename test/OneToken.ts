@@ -1,5 +1,5 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+import { expect } from "chai";
+import { ethers } from "hardhat";
 const defaultOwner = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266";
 const randomAddress = "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65";
 
@@ -14,14 +14,14 @@ describe("totalSupply", function () {
   });
 });
 
-describe("getBalance", function () {
+describe("balanceOf", function () {
   it("Should return the balance equal to 100", async function () {
     
     const OneToken = await ethers.getContractFactory("OneToken");
     const oneToken = await OneToken.deploy(100, randomAddress);
     await oneToken.deployed();
     
-    expect(await oneToken.getBalance(randomAddress)).to.equal(100);
+    expect(await oneToken.balanceOf(randomAddress)).to.equal(100);
   });
 });
 
@@ -36,11 +36,11 @@ describe("transfer", function () {
     oneToken.approve(randomAddress, 101)
 
     oneToken.transfer(randomAddress, 60);
-    expect(await oneToken.getBalance(randomAddress)).to.equal(60);
+    expect(await oneToken.balanceOf(randomAddress)).to.equal(60);
     oneToken.transfer(randomAddress, 60);
-    expect(await oneToken.getBalance(randomAddress)).to.equal(60);
+    expect(await oneToken.balanceOf(randomAddress)).to.equal(60);
     oneToken.transfer(randomAddress, 40);
-    expect(await oneToken.getBalance(randomAddress)).to.equal(100);
+    expect(await oneToken.balanceOf(randomAddress)).to.equal(100);
   })
 })
 
@@ -54,8 +54,8 @@ describe("transferFrom", function () {
     await oneToken.approve(randomAddress, 99999);
 
     oneToken.transferFrom(defaultOwner, randomAddress, 400);
-    expect(await oneToken.getBalance(randomAddress)).to.equal(400);
-    expect(await oneToken.getBalance(defaultOwner)).to.equal(600);
+    expect(await oneToken.balanceOf(randomAddress)).to.equal(400);
+    expect(await oneToken.balanceOf(defaultOwner)).to.equal(600);
   })
 })
 
