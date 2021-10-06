@@ -15,10 +15,10 @@ async function main() {
 
   // We get the contract to deploy
   const OneToken = await hre.ethers.getContractFactory("OneToken");
-  const oneToken = await OneToken.deploy(100);
+  console.log("Deploying the OneToken...")
 
+  const oneToken = await OneToken.deploy(100000, "0x0000000000000000000000000000000000000000");
   await oneToken.deployed();
-
   console.log("OneToken deployed to: ", oneToken.address);
 }
 
