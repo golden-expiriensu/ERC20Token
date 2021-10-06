@@ -103,7 +103,7 @@ contract OneToken is IERC20 {
         override
         returns (bool)
     {
-        allowed[msg.sender][spender] += numberTokens;
+        allowed[msg.sender][spender] = numberTokens;
         return true;
     }
 

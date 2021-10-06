@@ -45,7 +45,7 @@ describe("transfer", function () {
 })
 
 describe("transferFrom", function () {
-  it("Should return 400 tokens on spender and 600 on owner", async function (){
+  it("Should return 400 tokens on spender and 600 on owner", async function () {
 
     const OneToken = await ethers.getContractFactory("OneToken");
     const oneToken = await OneToken.deploy(1000, defaultOwner);
@@ -60,7 +60,7 @@ describe("transferFrom", function () {
 })
 
 describe("allowance", function () {
-  it("Should return 100000 allowed tokens after approve(100000)", async function (){
+  it("Should return 100000 allowed tokens after approve(100000)", async function () {
 
     const OneToken = await ethers.getContractFactory("OneToken");
     const oneToken = await OneToken.deploy(1000, "0x0000000000000000000000000000000000000000");
@@ -68,5 +68,20 @@ describe("allowance", function () {
 
     await oneToken.approve(randomAddress, 100000);    
     expect(await oneToken.allowance(defaultOwner, randomAddress)).to.equal(100000);
+  })
+})
+
+describe("mint and burn", function () {
+  it("Should create new 100 tokens and then delete them", async function () {
+    
+    const OneToken = await ethers.getContractFactory("OneToken");
+    const oneToken = await OneToken.deploy(1000, defaultOwner);
+    await oneToken.deployed();
+
+    expect(await oneToken.totalSupply()).to.equal(1000);
+    await oneToken.mint(defaultOwner, 100);
+    expect(await oneToken.totalSupply()).to.equal(1100);
+    await oneToken.burn(defaultOwner, 100);
+    expect(await oneToken.totalSupply()).to.equal(1000);
   })
 })

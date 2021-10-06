@@ -3,7 +3,7 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-import hre from "hardhat";
+import { ethers } from "hardhat"
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -14,7 +14,7 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const OneToken = await hre.ethers.getContractFactory("OneToken");
+  const OneToken = await ethers.getContractFactory("OneToken");
   console.log("Deploying the OneToken...")
 
   const oneToken = await OneToken.deploy(100000, "0x0000000000000000000000000000000000000000");

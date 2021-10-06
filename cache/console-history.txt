@@ -1,3 +1,4 @@
+const OneToken = await ethers.getContractFactory("OneToken")
 console.log(await token.allowance("0x71be63f3384f5fb98995898a86b02fb2426c5788", "0x976ea74026e726554db657fa54763abd0c3a0aa9"))
 console.log(await token.getBalance("0x976ea74026e726554db657fa54763abd0c3a0aa9"))
 await token.transfer("0x976ea74026e726554db657fa54763abd0c3a0aa9", 1)
