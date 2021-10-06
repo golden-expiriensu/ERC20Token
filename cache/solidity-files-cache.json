@@ -36,8 +36,8 @@
       ]
     },
     "/home/academy1/Desktop/danil/ERC20/contracts/OneToken.sol": {
-      "lastModificationDate": 1633518106561,
-      "contentHash": "ffa767d501c46370c006a2adea60bd72",
+      "lastModificationDate": 1633526031821,
+      "contentHash": "4b00703124d0996104f1a9937720f190",
       "sourceName": "contracts/OneToken.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -66,6 +66,7 @@
         "^0.8.4"
       ],
       "artifacts": [
+        "IERC20",
         "OneToken"
       ]
     }

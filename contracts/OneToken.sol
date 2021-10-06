@@ -1,11 +1,33 @@
 pragma solidity ^0.8.4;
 
-contract OneToken {
+interface IERC20 {
+    function mint(address account, uint256 value) external;
+    function burn(address account, uint256 value) external;
+
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address owner) external view returns (uint256);
+    function transferFrom(
+        address from,
+        address to,
+        uint256 numberTokens
+    ) external returns (bool success);
+    function transfer(address to, uint256 numberTokens) external returns (bool);
+    function approve(address spender, uint256 numberTokens)
+        external
+        returns (bool);
+
+    function allowance(address owner, address spender)
+        external
+        view
+        returns (uint256);
+}
+
+contract OneToken is IERC20 {
     mapping(address => uint256) balances;
     mapping(address => mapping(address => uint256)) allowed;
     uint256 totalSupply_;
     string public name = "One";
-    string public symbol = "ntn"; 
+    string public symbol = "ntn";
 
     modifier enoughTokensOnBalance(uint256 numberTokens, address owner) {
         if (balances[owner] >= numberTokens) _;
@@ -16,7 +38,11 @@ contract OneToken {
         address spender,
         uint256 numberTokens
     ) {
-        if (numberTokens < allowance(owner, spender)) _;
+        if (numberTokens < this.allowance(owner, spender)) _;
+    }
+
+    modifier onlyPositiveValue(uint256 numberOfTokens) {
+        if (numberOfTokens > 0) _;
     }
 
     constructor(uint256 total, address bank) {
@@ -25,11 +51,23 @@ contract OneToken {
         else balances[bank] = total;
     }
 
-    function totalSupply() public view returns (uint256) {
+    function mint(address account, uint256 value) external override {
+        balances[account] += value;
+        totalSupply_ += value;
+    }
+
+    function burn(address account, uint256 value) external override {
+        balances[account] -= value;
+        if (balances[account] < 0) balances[account] = 0;
+        totalSupply_ -= value;
+        if (totalSupply_ == 0) totalSupply_ = 0;
+    }
+
+    function totalSupply() external override view returns (uint256) {
         return totalSupply_;
     }
 
-    function balanceOf(address owner) public view returns (uint256) {
+    function balanceOf(address owner) external override view returns (uint256) {
         return balances[owner];
     }
 
@@ -38,23 +76,31 @@ contract OneToken {
         address to,
         uint256 numberTokens
     )
-        public
+        external
+        override
+        onlyPositiveValue(numberTokens)
         enoughTokensOnBalance(numberTokens, from)
         enoughAllowedTokens(from, to, numberTokens)
-        returns (bool)
+        returns (bool success)
     {
         balances[from] -= numberTokens;
         allowed[from][to] -= numberTokens;
         balances[to] += numberTokens;
-        return true;
+        success = true;
+        return success;
     }
 
-    function transfer(address to, uint256 numberTokens) public returns (bool) {
-        return transferFrom(msg.sender, to, numberTokens);
+    function transfer(address to, uint256 numberTokens)
+        external
+        override
+        returns (bool)
+    {
+        return this.transferFrom(msg.sender, to, numberTokens);
     }
 
     function approve(address spender, uint256 numberTokens)
-        public
+        external
+        override
         returns (bool)
     {
         allowed[msg.sender][spender] += numberTokens;
@@ -62,7 +108,8 @@ contract OneToken {
     }
 
     function allowance(address owner, address spender)
-        public
+        external
+        override
         view
         returns (uint256)
     {
