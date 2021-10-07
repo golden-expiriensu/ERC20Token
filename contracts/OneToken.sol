@@ -33,6 +33,7 @@ contract OneToken is IERC20 {
     uint256 totalSupply_;
     string public name = "One Token";
     string public symbol = "ntn";
+    uint8 public decimals = 18;
     address minter;
     address burner;
 
