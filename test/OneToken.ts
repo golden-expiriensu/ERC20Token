@@ -7,12 +7,14 @@ let OneToken: ContractFactory;
 let oneToken: Contract;
 let addr: SignerWithAddress[];
 
+const zeroAddress = "0x0000000000000000000000000000000000000000";
+
 describe("Token test", function () {
-  
-  beforeEach(async function() {
-    
+
+  beforeEach(async function () {
+
     addr = await ethers.getSigners();
-    
+
     OneToken = await ethers.getContractFactory("OneToken");
     oneToken = await OneToken.deploy(100, addr[0].address);
     await oneToken.deployed();
@@ -31,14 +33,29 @@ describe("Token test", function () {
   });
 
   describe("transfer", function () {
-    it("Should transfer 60 tokens with the following transaction failure due to insufficient balance",
+
+    it("Should transfer 60 tokens",
       async function () {
 
         await oneToken.approve(addr[1].address, 999)
-
         await oneToken.transfer(addr[1].address, 60);
         expect(await oneToken.balanceOf(addr[1].address)).to.equal(60);
-        await expect(oneToken.transfer(addr[1].address, 60)).to.be.revertedWith('not enought tokens on balance');
+      })
+
+    it("Should throw transaction failure due to insufficient balance",
+      async function () {
+        await oneToken.approve(addr[1].address, 999)
+        expect(oneToken.transfer(addr[1].address, 600)).to.be.revertedWith("not enought tokens on balance");
+      })
+
+    it("Should throw transaction failture due to insufficient allowance",
+      async function () {
+        await expect(oneToken.transfer(addr[1].address, 1)).to.be.revertedWith('not enought allowed tokens')
+      })
+
+    it("Should throw transaction failture due to zero address",
+      async function () {
+        expect(oneToken.transfer(zeroAddress, 1)).to.be.revertedWith("zero address not allowed (address to)");
       })
   })
 

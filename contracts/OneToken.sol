@@ -77,12 +77,12 @@ contract OneToken is IERC20 {
         address from,
         address to,
         uint256 amount
-    ) public override returns (bool success) {
+    ) public override returns (bool) {
 
         require(from != address(0), "zero address not allowed (address from)");
         require(to != address(0), "zero address not allowed (address to)");
         require(balances[from] >= amount, "not enought tokens on balance");
-        require(amount > 0, "amount <= 0");
+        require(amount > 0, "allowed to transfer only positive amount");
         require(
             amount < this.allowance(from, to),
             "not enought allowed tokens"
@@ -92,8 +92,7 @@ contract OneToken is IERC20 {
         allowed[from][to] -= amount;
         balances[to] += amount;
 
-        success = true;
-        return success;
+        return true;
     }
 
     function transfer(address to, uint256 amount)
