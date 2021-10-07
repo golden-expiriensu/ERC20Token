@@ -1,50 +1,16 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/academy1/Desktop/danil/ERC20/node_modules/hardhat/console.sol": {
-      "lastModificationDate": 1633426231140,
-      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
-      "sourceName": "hardhat/console.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.4.22 <0.9.0"
-      ],
-      "artifacts": [
-        "console"
-      ]
-    },
     "/home/academy1/Desktop/danil/ERC20/contracts/OneToken.sol": {
-      "lastModificationDate": 1633526473799,
-      "contentHash": "1aba2bcbffbf1022e05ab48697f4ade0",
+      "lastModificationDate": 1633589222456,
+      "contentHash": "5f2ca6a2244fe9dbe13caf1334507b3f",
       "sourceName": "contracts/OneToken.sol",
       "solcConfig": {
         "version": "0.8.4",
         "settings": {
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 400
           },
           "outputSelection": {
             "*": {

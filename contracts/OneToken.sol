@@ -2,16 +2,21 @@ pragma solidity ^0.8.4;
 
 interface IERC20 {
     function mint(address account, uint256 value) external;
+
     function burn(address account, uint256 value) external;
 
     function totalSupply() external view returns (uint256);
+
     function balanceOf(address owner) external view returns (uint256);
+
     function transferFrom(
         address from,
         address to,
         uint256 numberTokens
     ) external returns (bool success);
+
     function transfer(address to, uint256 numberTokens) external returns (bool);
+
     function approve(address spender, uint256 numberTokens)
         external
         returns (bool);
@@ -30,7 +35,8 @@ contract OneToken is IERC20 {
     string public symbol = "ntn";
 
     modifier enoughTokensOnBalance(uint256 numberTokens, address owner) {
-        if (balances[owner] >= numberTokens) _;
+        require(balances[owner] >= numberTokens, 'error');
+        _;
     }
 
     modifier enoughAllowedTokens(
@@ -57,17 +63,16 @@ contract OneToken is IERC20 {
     }
 
     function burn(address account, uint256 value) external override {
+        require(balances[account]>=value,'');
         balances[account] -= value;
-        if (balances[account] < 0) balances[account] = 0;
         totalSupply_ -= value;
-        if (totalSupply_ == 0) totalSupply_ = 0;
     }
 
-    function totalSupply() external override view returns (uint256) {
+    function totalSupply() external view override returns (uint256) {
         return totalSupply_;
     }
 
-    function balanceOf(address owner) external override view returns (uint256) {
+    function balanceOf(address owner) external view override returns (uint256) {
         return balances[owner];
     }
 
@@ -109,8 +114,8 @@ contract OneToken is IERC20 {
 
     function allowance(address owner, address spender)
         external
-        override
         view
+        override
         returns (uint256)
     {
         return allowed[owner][spender];
