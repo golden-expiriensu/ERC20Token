@@ -34,23 +34,6 @@ contract OneToken is IERC20 {
     string public name = "One";
     string public symbol = "ntn";
 
-    modifier enoughTokensOnBalance(uint256 numberTokens, address owner) {
-        require(balances[owner] >= numberTokens, 'error');
-        _;
-    }
-
-    modifier enoughAllowedTokens(
-        address owner,
-        address spender,
-        uint256 numberTokens
-    ) {
-        if (numberTokens < this.allowance(owner, spender)) _;
-    }
-
-    modifier onlyPositiveValue(uint256 numberOfTokens) {
-        if (numberOfTokens > 0) _;
-    }
-
     constructor(uint256 total, address bank) {
         totalSupply_ = total;
         if (bank == address(0)) balances[msg.sender] = total;
@@ -63,7 +46,7 @@ contract OneToken is IERC20 {
     }
 
     function burn(address account, uint256 value) external override {
-        require(balances[account]>=value,'');
+        require(balances[account] >= value, "");
         balances[account] -= value;
         totalSupply_ -= value;
     }
@@ -79,36 +62,39 @@ contract OneToken is IERC20 {
     function transferFrom(
         address from,
         address to,
-        uint256 numberTokens
-    )
-        external
-        override
-        onlyPositiveValue(numberTokens)
-        enoughTokensOnBalance(numberTokens, from)
-        enoughAllowedTokens(from, to, numberTokens)
-        returns (bool success)
-    {
-        balances[from] -= numberTokens;
-        allowed[from][to] -= numberTokens;
-        balances[to] += numberTokens;
+        uint256 amount
+    ) external override returns (bool success) {
+        
+        require(from != address(0), 'zero address not allowed (address from)');
+        require(to != address(0), 'zero address not allowed (address to)');
+        require(balances[from] >= amount, "not enought tokens on balance");
+        require(amount > 0, "amount <= 0");
+        require(
+            amount < this.allowance(from, to),
+            "not enought allowed tokens"
+        );
+
+        balances[from] -= amount;
+        allowed[from][to] -= amount;
+        balances[to] += amount;
         success = true;
         return success;
     }
 
-    function transfer(address to, uint256 numberTokens)
+    function transfer(address to, uint256 amount)
         external
         override
         returns (bool)
     {
-        return this.transferFrom(msg.sender, to, numberTokens);
+        return this.transferFrom(msg.sender, to, amount);
     }
 
-    function approve(address spender, uint256 numberTokens)
+    function approve(address spender, uint256 amount)
         external
         override
         returns (bool)
     {
-        allowed[msg.sender][spender] = numberTokens;
+        allowed[msg.sender][spender] = amount;
         return true;
     }
 
