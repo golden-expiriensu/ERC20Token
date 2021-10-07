@@ -1,9 +1,9 @@
 pragma solidity ^0.8.4;
 
 interface IERC20 {
-    function mint(address account, uint256 value) external;
+    function mint(address account, uint256 amount) external;
 
-    function burn(address account, uint256 value) external;
+    function burn(address account, uint256 amount) external;
 
     function totalSupply() external view returns (uint256);
 
@@ -31,31 +31,45 @@ contract OneToken is IERC20 {
     mapping(address => uint256) balances;
     mapping(address => mapping(address => uint256)) allowed;
     uint256 totalSupply_;
-    string public name = "One";
+    string public name = "One Token";
     string public symbol = "ntn";
+    address minter;
+    address burner;
 
-    constructor(uint256 total, address bank) {
+    constructor(uint256 total, address owner) {
         totalSupply_ = total;
-        if (bank == address(0)) balances[msg.sender] = total;
-        else balances[bank] = total;
+        if (owner == address(0)) balances[msg.sender] = total;
+        else balances[owner] = total;
+        minter = msg.sender;
+        burner = msg.sender;
     }
 
-    function mint(address account, uint256 value) external override {
-        balances[account] += value;
-        totalSupply_ += value;
+    modifier onlyMinter() {
+        require(msg.sender == minter, "mint allowed only for minter");
+        _;
     }
 
-    function burn(address account, uint256 value) external override {
-        require(balances[account] >= value, "");
-        balances[account] -= value;
-        totalSupply_ -= value;
+    modifier onlyBurner() {
+        require(msg.sender == burner, "burn allowed only for burner");
+        _;
     }
 
-    function totalSupply() external view override returns (uint256) {
+    function mint(address account, uint256 amount) public override onlyMinter {
+        balances[account] += amount;
+        totalSupply_ += amount;
+    }
+
+    function burn(address account, uint256 amount) public override onlyBurner {
+        require(balances[account] >= amount, "");
+        balances[account] -= amount;
+        totalSupply_ -= amount;
+    }
+
+    function totalSupply() public view override returns (uint256) {
         return totalSupply_;
     }
 
-    function balanceOf(address owner) external view override returns (uint256) {
+    function balanceOf(address owner) public view override returns (uint256) {
         return balances[owner];
     }
 
@@ -63,10 +77,10 @@ contract OneToken is IERC20 {
         address from,
         address to,
         uint256 amount
-    ) external override returns (bool success) {
-        
-        require(from != address(0), 'zero address not allowed (address from)');
-        require(to != address(0), 'zero address not allowed (address to)');
+    ) public override returns (bool success) {
+
+        require(from != address(0), "zero address not allowed (address from)");
+        require(to != address(0), "zero address not allowed (address to)");
         require(balances[from] >= amount, "not enought tokens on balance");
         require(amount > 0, "amount <= 0");
         require(
@@ -77,12 +91,13 @@ contract OneToken is IERC20 {
         balances[from] -= amount;
         allowed[from][to] -= amount;
         balances[to] += amount;
+
         success = true;
         return success;
     }
 
     function transfer(address to, uint256 amount)
-        external
+        public
         override
         returns (bool)
     {
@@ -90,7 +105,7 @@ contract OneToken is IERC20 {
     }
 
     function approve(address spender, uint256 amount)
-        external
+        public
         override
         returns (bool)
     {
@@ -99,7 +114,7 @@ contract OneToken is IERC20 {
     }
 
     function allowance(address owner, address spender)
-        external
+        public
         view
         override
         returns (uint256)
