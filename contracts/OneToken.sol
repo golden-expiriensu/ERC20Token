@@ -8,7 +8,7 @@ contract OneToken is IERC20 {
     uint256 totalSupply_;
     string public name = "One Token";
     string public symbol = "NTN";
-    uint8 public decimals = 6;
+    uint8 public decimals = 18;
     address minter;
     address burner;
 
@@ -36,7 +36,7 @@ contract OneToken is IERC20 {
     }
 
     function burn(address account, uint256 amount) public override onlyBurner {
-        require(balances[account] >= amount, "");
+        require(balances[account] >= amount, "not enought tokens on balance to burn");
         balances[account] -= amount;
         totalSupply_ -= amount;
     }
@@ -64,12 +64,7 @@ contract OneToken is IERC20 {
             "not enought allowed tokens"
         );
 
-        balances[from] -= amount;
-        allowed[from][to] -= amount;
-        balances[to] += amount;
-        emit Transfer(from, to, amount);
-
-        return true;
+        return _transfer(from, to, amount);
     }
 
     function transfer(address to, uint256 amount)
@@ -77,7 +72,17 @@ contract OneToken is IERC20 {
         override
         returns (bool)
     {
-        return this.transferFrom(msg.sender, to, amount);
+        return _transfer(msg.sender, to, amount);
+    }
+
+    function _transfer(address from, address to, uint256 amount) internal returns(bool success){
+
+        balances[from] -= amount;
+        allowed[from][to] -= amount;
+        balances[to] += amount;
+        success = true;
+        emit Transfer(from, to, amount);
+        return success;
     }
 
     function approve(address spender, uint256 amount)

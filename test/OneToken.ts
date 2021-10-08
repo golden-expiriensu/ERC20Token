@@ -42,22 +42,6 @@ describe("Token test", function () {
         expect(await oneToken.balanceOf(addr[1].address)).to.equal(60);
         expect(await oneToken.balanceOf(addr[0].address)).to.equal(40);
       })
-
-    it("Should throw transaction failure due to insufficient balance",
-      async function () {
-        await oneToken.approve(addr[1].address, 999)
-        expect(oneToken.transfer(addr[1].address, 600)).to.be.revertedWith("not enought tokens on balance");
-      })
-
-    it("Should throw transaction failture due to insufficient allowance",
-      async function () {
-        await expect(oneToken.transfer(addr[1].address, 1)).to.be.revertedWith('not enought allowed tokens')
-      })
-
-    it("Should throw transaction failture due to zero address",
-      async function () {
-        expect(oneToken.transfer(zeroAddress, 1)).to.be.revertedWith("zero address not allowed (address to)");
-      })
   })
 
   describe("transferFrom", function () {
@@ -69,6 +53,22 @@ describe("Token test", function () {
       expect(await oneToken.balanceOf(addr[1].address)).to.equal(40);
       expect(await oneToken.balanceOf(addr[0].address)).to.equal(60);
     })
+
+    it("Should throw transaction failure due to insufficient balance",
+      async function () {
+        await oneToken.approve(addr[1].address, 999)
+        expect(oneToken.transferFrom(addr[0].address, addr[1].address, 600)).to.be.revertedWith("not enought tokens on balance");
+      })
+
+    it("Should throw transaction failture due to insufficient allowance",
+      async function () {
+        await expect(oneToken.transferFrom(addr[0].address, addr[1].address, 1)).to.be.revertedWith('not enought allowed tokens')
+      })
+
+    it("Should throw transaction failture due to zero address",
+      async function () {
+        expect(oneToken.transferFrom(addr[0].address, zeroAddress, 1)).to.be.revertedWith("zero address not allowed (address to)");
+      })
   })
 
   describe("approve", function () {
@@ -105,6 +105,12 @@ describe("Token test", function () {
       expect(await oneToken.totalSupply()).to.equal(200);
       await oneToken.burn(addr[0].address, 100);
       expect(await oneToken.totalSupply()).to.equal(100);
+    })
+
+    it("Should throw transaction failture due to account has not minter/burner permissions", async function () {
+
+      await expect(oneToken.connect(addr[4]).mint(addr[0].address, 100)).to.be.revertedWith("mint allowed only for minter");
+      await expect(oneToken.connect(addr[4]).burn(addr[0].address, 100)).to.be.revertedWith("burn allowed only for burner");
     })
   })
 })
