@@ -4,7 +4,7 @@ dotenvConfig();
 import { NetworkUserConfig } from 'hardhat/types';
 import '@nomiclabs/hardhat-waffle';
 import "@nomiclabs/hardhat-ethers";
-//import "./tasks";
+require("./tasks/addMinter.ts");
 
 const chainIds = {
   ganache: 1337,
@@ -116,6 +116,7 @@ module.exports = {
     cache: './cache',
     sources: './contracts',
     tests: './test',
+    tasks: './tasks',
   },
   mocha: {
     timeout: 20000

@@ -102,6 +102,8 @@ describe("Token test", function () {
   describe("8) mint and burn", function () {
     it("a) Should create new 100 tokens and then delete them", async function () {
 
+      await oneToken.addMinter(addr[0].address);
+      await oneToken.addBurner(addr[0].address);
       expect(await oneToken.totalSupply()).to.equal(parseEther('100'));
       await oneToken.mint(addr[0].address, parseEther('100'));
       expect(await oneToken.totalSupply()).to.equal(parseEther('200'));
