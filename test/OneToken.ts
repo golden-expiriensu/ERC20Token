@@ -79,6 +79,16 @@ describe("Token test", function () {
     })
   })
 
+  describe("Increase/Deacrease allowance", function () {
+    it("Should increase allowance by 100 and decrease on the same amount", async function () {
+
+      await oneToken.increaseAllowance(addr[6].address, 100);
+      expect(await oneToken.allowance(addr[0].address, addr[6].address)).to.equal(100);
+      await oneToken.decreaseAllowance(addr[6].address, 100);
+      expect(await oneToken.allowance(addr[0].address, addr[6].address)).to.equal(0);
+    })
+  })
+
   describe("allowance", function () {
     it("Should approve 100000 tokens", async function () {
 

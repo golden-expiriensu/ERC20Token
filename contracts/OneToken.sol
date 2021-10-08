@@ -7,7 +7,7 @@ contract OneToken is IERC20 {
     mapping(address => mapping(address => uint256)) allowed;
     uint256 totalSupply_;
     string public name = "One Token";
-    string public symbol = "ntn";
+    string public symbol = "NTN";
     uint8 public decimals = 6;
     address minter;
     address burner;
@@ -87,6 +87,22 @@ contract OneToken is IERC20 {
     {
         allowed[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
+        return true;
+    }
+
+    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+
+        uint256 currentAllowance = allowed[msg.sender][spender];
+        approve(spender, currentAllowance + addedValue);
+        return true;
+    }
+
+    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+
+        uint256 currentAllowance = allowed[msg.sender][spender];
+        require(currentAllowance >= subtractedValue, "Decreased allowance below zero");
+        approve(spender, currentAllowance - subtractedValue);
+
         return true;
     }
 
