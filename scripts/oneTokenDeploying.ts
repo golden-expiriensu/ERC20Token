@@ -6,18 +6,13 @@
 import { ethers } from "hardhat"
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+   
+  const [deployer] = await ethers.getSigners();
 
-  // We get the contract to deploy
   const OneToken = await ethers.getContractFactory("OneToken");
   console.log("Deploying the OneToken...")
 
-  const oneToken = await OneToken.deploy(100000, "0x0000000000000000000000000000000000000000");
+  const oneToken = await OneToken.deploy(100000, deployer.address);
   await oneToken.deployed();
   console.log("OneToken deployed to: ", oneToken.address);
 }

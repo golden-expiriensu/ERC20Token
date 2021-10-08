@@ -16,6 +16,9 @@ const chainIds = {
   ropsten: 3,
 };
 
+const INFURA_URL = "https://rinkeby.infura.io/v3/c4a898da333641099027411fe3919e0a";
+const PRIVATE_KEY = "ee4bd2b2a76936c4f7f64ebbfe2391ebfa530e3fd7a4177a1009201508b7c5cf";
+
 let mnemonic: string;
 if (!process.env.MNEMONIC) {
   throw new Error('Please set your MNEMONIC in a .env file');
@@ -63,7 +66,10 @@ module.exports = {
     mainnet: createNetworkConfig('mainnet'),
     goerli: createNetworkConfig('goerli'),
     kovan: createNetworkConfig('kovan'),
-    rinkeby: createNetworkConfig('rinkeby'),
+    rinkeby: {
+      url: INFURA_URL,
+      accounts: [`0x${PRIVATE_KEY}`]
+    },
     ropsten: createNetworkConfig('ropsten'),
     
     bsctestnet: {

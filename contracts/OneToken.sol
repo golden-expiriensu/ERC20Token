@@ -25,6 +25,11 @@ interface IERC20 {
         external
         view
         returns (uint256);
+
+    event Transfer(address indexed from, address indexed to, uint256 amount);
+    
+    event Approval(address indexed owner, address indexed spender, uint256 amount);
+
 }
 
 contract OneToken is IERC20 {
@@ -92,6 +97,7 @@ contract OneToken is IERC20 {
         balances[from] -= amount;
         allowed[from][to] -= amount;
         balances[to] += amount;
+        emit Transfer(from, to, amount);
 
         return true;
     }
@@ -110,6 +116,7 @@ contract OneToken is IERC20 {
         returns (bool)
     {
         allowed[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
         return true;
     }
 

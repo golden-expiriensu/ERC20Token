@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/academy1/Desktop/danil/ERC20/contracts/OneToken.sol": {
-      "lastModificationDate": 1633602014201,
-      "contentHash": "4c2bd39fd19a95c104c799ccda354f54",
+    "/home/danil/Desktop/ERC20/contracts/OneToken.sol": {
+      "lastModificationDate": 1633660255008,
+      "contentHash": "dc2b7b877e1df273b5d5649f51e4290d",
       "sourceName": "contracts/OneToken.sol",
       "solcConfig": {
         "version": "0.8.4",
