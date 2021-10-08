@@ -71,6 +71,14 @@ describe("Token test", function () {
     })
   })
 
+  describe("approve", function () {
+    it("Should approve 10101 tokens", async function () {
+
+      await oneToken.approve(addr[6].address, 10101);
+      expect(await oneToken.allowance(addr[0].address, addr[6].address)).to.equal(10101);
+    })
+  })
+
   describe("allowance", function () {
     it("Should approve 100000 tokens", async function () {
 
