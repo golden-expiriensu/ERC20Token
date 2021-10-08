@@ -12,7 +12,7 @@ async function main() {
   const OneToken = await ethers.getContractFactory("OneToken");
   console.log("Deploying the OneToken...")
 
-  const oneToken = await OneToken.deploy(100000, deployer.address);
+  const oneToken = await OneToken.deploy(999999000, deployer.address);
   await oneToken.deployed();
   console.log("OneToken deployed to: ", oneToken.address);
 }

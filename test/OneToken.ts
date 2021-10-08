@@ -40,6 +40,7 @@ describe("Token test", function () {
         await oneToken.approve(addr[1].address, 999)
         await oneToken.transfer(addr[1].address, 60);
         expect(await oneToken.balanceOf(addr[1].address)).to.equal(60);
+        expect(await oneToken.balanceOf(addr[0].address)).to.equal(40);
       })
 
     it("Should throw transaction failure due to insufficient balance",

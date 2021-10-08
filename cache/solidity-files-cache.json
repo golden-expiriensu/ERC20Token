@@ -2,9 +2,45 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/danil/Desktop/ERC20/contracts/OneToken.sol": {
-      "lastModificationDate": 1633660255008,
-      "contentHash": "dc2b7b877e1df273b5d5649f51e4290d",
+      "lastModificationDate": 1633665477671,
+      "contentHash": "af104f405787d8e9f9d4cb7487ab9da2",
       "sourceName": "contracts/OneToken.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.4"
+      ],
+      "artifacts": [
+        "OneToken"
+      ]
+    },
+    "/home/danil/Desktop/ERC20/contracts/IERC20.sol": {
+      "lastModificationDate": 1633665248874,
+      "contentHash": "5147e493b6d9ea5212eed5cbc6fa8e4d",
+      "sourceName": "contracts/IERC20.sol",
       "solcConfig": {
         "version": "0.8.4",
         "settings": {
@@ -32,8 +68,7 @@
         "^0.8.4"
       ],
       "artifacts": [
-        "IERC20",
-        "OneToken"
+        "IERC20"
       ]
     }
   }
